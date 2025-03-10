@@ -149,7 +149,5 @@ def f(n):
 # running the MCMC
 K = 100000
 K_chunk = int(K/1000)
-# K = 4000
-# K_chunk = 10
 K_latent = 400
 MCMC_noncentred_c25_v2 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/MCMC_noncentred_c25_v2',1)
