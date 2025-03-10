@@ -8,18 +8,6 @@
 import numpy as np
 from numpy import random
 
-# importing jax
-import jax
-import jax.numpy as jnp
-from jax import jit
-
-# importing storage for results
-import zarr
-
-# importing teams messaging
-from knockknock import teams_sender
-#@teams_sender("https://livelancsac.webhook.office.com/webhookb2/3d6a96cd-dfcc-4879-a4b4-fbf819b2b0aa@9c9bcd11-977a-4e9c-a9a0-bc734090164a/IncomingWebhook/fc46931452294793b7c5f4fa55c75b07/e07e4eb0-8af1-4f92-8974-01147fb1408a")
-
 # importing system
 import sys
 
@@ -31,7 +19,7 @@ import pandas as pd
 ### simulating data
 
 # moving upwards
-sys.path.append('./././Lester_Model')
+sys.path.append('./././AntiDOTE_Methods')
 
 # importing functions for model simulation
 import function_scripts.model.UC_simulation as UC_simulation_file
@@ -40,7 +28,7 @@ import function_scripts.model.UC_simulation as UC_simulation_file
 UC_sim = UC_simulation_file.UC_sim
 
 # importing the csv - only the important columns
-data_real = pd.read_csv("Lester_Model/Antidote_household.csv", usecols=["hid","pid","date","age","sex","hiv","hivChild","cpt","result","week"])
+data_real = pd.read_csv("AntiDOTE_Methods/Antidote_household.csv", usecols=["hid","pid","date","age","sex","hiv","hivChild","cpt","result","week"])
 
 # converting the pid to integers (and saving lists of sex and age)
 pid_unique = []
