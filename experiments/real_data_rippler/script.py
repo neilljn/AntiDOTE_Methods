@@ -19,7 +19,7 @@ import pandas as pd
 ### simulating data
 
 # moving upwards
-sys.path.append('./././AntiDOTE_Methods')
+sys.path.append('./.')
 
 # importing functions for model simulation
 import function_scripts.model.UC_simulation as UC_simulation_file
@@ -28,7 +28,7 @@ import function_scripts.model.UC_simulation as UC_simulation_file
 UC_sim = UC_simulation_file.UC_sim
 
 # importing the csv - only the important columns
-data_real = pd.read_csv("AntiDOTE_Methods/Antidote_household.csv", usecols=["hid","pid","date","age","sex","hiv","hivChild","cpt","result","week"])
+data_real = pd.read_csv("Antidote_household.csv", usecols=["hid","pid","date","age","sex","hiv","hivChild","cpt","result","week"])
 
 # converting the pid to integers (and saving lists of sex and age)
 pid_unique = []
@@ -135,4 +135,4 @@ def f(n):
 K = 100000
 K_chunk = int(K/1000)
 K_latent = 400
-MCMC_real_data_rippler = inference_rippler(test_results_real,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../experiments/real_data_rippler/MCMC_output_test',1)
+MCMC_real_data_rippler = inference_rippler(test_results_real,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/real_data_rippler/MCMC_output_test',1)
