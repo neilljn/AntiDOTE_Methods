@@ -124,7 +124,7 @@ test_results = test_outcome * test_occurance
 ### inference
 
 # importing function for inference
-import function_scripts.iFFBS.UC_inference_iFFBS_v2 as inference_file
+import function_scripts.iFFBS.UC_inference_iFFBS as inference_file
 
 # naming the function
 inference_iFFBS = inference_file.inference_iFFBS

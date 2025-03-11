@@ -124,7 +124,7 @@ test_results = test_outcome * test_occurance
 ### inference
 
 # importing function for inference
-import function_scripts.block.UC_inference_block_v2 as inference_file
+import function_scripts.block.UC_inference_block as inference_file
 
 # naming the function
 inference_block = inference_file.inference_block

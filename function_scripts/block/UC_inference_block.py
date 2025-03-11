@@ -13,10 +13,6 @@ import zarr
 # importing time
 import time
 
-# importing teams messaging
-from knockknock import teams_sender
-#@teams_sender("https://livelancsac.webhook.office.com/webhookb2/3d6a96cd-dfcc-4879-a4b4-fbf819b2b0aa@9c9bcd11-977a-4e9c-a9a0-bc734090164a/IncomingWebhook/fc46931452294793b7c5f4fa55c75b07/e07e4eb0-8af1-4f92-8974-01147fb1408a")
-
 # importing other functions
 from function_scripts.block.log_dis_X import log_dis_X_jit
 from function_scripts.block.log_dis_theta import log_dis_theta_jit
@@ -26,8 +22,7 @@ from function_scripts.block.add import add_event
 from function_scripts.block.remove import remove_event
 
 # MCMC algorithm for inference using block updates
-@teams_sender("https://livelancsac.webhook.office.com/webhookb2/3d6a96cd-dfcc-4879-a4b4-fbf819b2b0aa@9c9bcd11-977a-4e9c-a9a0-bc734090164a/IncomingWebhook/fc46931452294793b7c5f4fa55c75b07/e07e4eb0-8af1-4f92-8974-01147fb1408a")
-def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,seasonal_matrix_G:np.array,seasonal_matrix_H:np.array,age:np.array,sex:np.array,sens:float,spec:float,theta_start:np.array,X_start:np.array,covariance_start:np.array,scaling:float,mu:np.array,prior_X_0:float,K:int,K_latent:int,K_chunk:int,m:int,zarr_names_start:str,seed:int) :
+def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,seasonal_matrix_G:np.array,seasonal_matrix_H:np.array,age:np.array,sex:np.array,sens:float,spec:float,theta_start:np.array,X_start:np.array,covariance_start:np.array,nu_0:float,f,delta:float,mu:np.array,prior_X_0:float,K:int,K_latent:int,K_chunk:int,m:int,zarr_names_start:str,seed:int) :
 
     # list of inputs:
     # test_results - matrix of all individuals colonisation status over time
@@ -64,10 +59,12 @@ def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,se
     theta = theta_start
     X = X_start
 
-    # creating the inital covariance matrix
-    #scaling = ((2.38**2)/4)
-    #covariance = scaling*scaling_start*np.identity(4)
+    # starting values for the adaptive scaling
     covariance = covariance_start
+    d = 4
+    lambda_current = 2.38/np.sqrt(d)
+    change = lambda_current/10
+    theta_mean = theta
 
     # initial number of acceptances in M-H steps
     acc_theta = 0
@@ -85,14 +82,17 @@ def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,se
     like_latent_store = zarr.open(zarr_names_start+'/like_latent.zarr', mode='w', shape=(K, ), chunks=(chunk_size, ))
     covariance_store = zarr.open(zarr_names_start+'/covariance.zarr', mode='w', shape=(K_chunk, 4, 4), chunks=(chunk_size, 4, 4))
     acc_store = zarr.open(zarr_names_start+'/acc.zarr', mode='w', shape=(3, ), chunks=(1, ))
+    lambda_current_store = zarr.open(zarr_names_start+'/lambda_current.zarr', mode='w', shape=(K, ), chunks=(chunk_size, ))
+
+    # creating a temporary storage array for theta (in the RAM)
+    theta_store_temp = np.zeros((K,4))
+    lambda_current_store_temp = np.zeros((K))
 
     # running each chunk
     for k_chunk in range(K_chunk):
 
         # creating temporary storage arrays (in the RAM)
-        theta_store_temp = np.zeros((chunk_size,4))
         X_store_temp = np.zeros((chunk_size,T+1,N))
-        U_store_temp = np.zeros((chunk_size,T,N))
         like_theta_store_temp = np.zeros(chunk_size)
         like_initial_store_temp = np.zeros(chunk_size)
         like_latent_store_temp = np.zeros(chunk_size)
@@ -104,8 +104,17 @@ def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,se
         # running the macroreplications of the MCMC
         for k in range(k_start,k_end):
 
+            # n from k (for adaptive steps)
+            n = k + 1
+
             # proposing a new value of theta
-            theta_prop = random.multivariate_normal(theta,covariance)
+            u_adapt = random.uniform()
+            if u_adapt < delta:
+                adapt_step = 0
+                theta_prop = random.multivariate_normal(theta,covariance_start)
+            else:
+                adapt_step = 1
+                theta_prop = random.multivariate_normal(theta,(lambda_current**2)*covariance)
 
             # calculating the likelihood of the current and proposed thetas
             ll_curr = log_dis_theta_jit(X,seasonal_matrix_G,seasonal_matrix_H,age,sex,theta,T,N,h,mu)
@@ -116,10 +125,24 @@ def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,se
             log_u = np.log(random.uniform())
             if log_u < log_alpha :
                 theta = theta_prop
-                like_theta = ll_prop
+                ll_curr = ll_prop
                 acc_theta += 1
+                lambda_current = lambda_current + adapt_step*2.38*change*(n**(-0.5))
             else:
-                like_theta = ll_prop
+                lambda_current = lambda_current - adapt_step*change*(n**(-0.5))
+
+            # updating the covariance matrix
+            theta_mean_previous = theta_mean
+            if n==1:
+                theta_mean = (theta+theta_start) / 2
+                covariance = (np.outer(theta_start,theta_start) + np.outer(theta,theta) - 2*np.outer(theta_mean,theta_mean) + (nu_0+d+1)*covariance) / (nu_0+d+3)
+            elif f(n)==f(n-1):
+                theta_mean = theta_mean_previous*(n-f(n))/(n-f(n)+1) + theta/(n-f(n)+1)
+                covariance = ((n-f(n)+nu_0+d+1)*covariance + np.outer(theta,theta) + (n-f(n))*np.outer(theta_mean_previous,theta_mean_previous) - (n-f(n)+1)*np.outer(theta_mean,theta_mean)) / (n-f(n)+nu_0+d+2)
+            else:
+                theta_replaced = theta_store_temp[f(n)-2]
+                theta_mean = theta_mean_previous + (theta - theta_replaced) / (n-f(n)+1)
+                covariance = covariance + (np.outer(theta,theta) - np.outer(theta_replaced,theta_replaced) + (n-f(n)+1)*(np.outer(theta_mean_previous,theta_mean_previous)-np.outer(theta_mean,theta_mean))) / (n-f(n)+nu_0+d+2)
 
             # proposing new initial conditions
             X_0_prop = np.array(X.copy())
@@ -176,42 +199,35 @@ def inference_block (test_results:np.array,N:int,h:np.array,gamma:float,T:int,se
 
             # saving current parameter values to the storage (in the RAM)
             k_temp = k % chunk_size
-            theta_store_temp[k_temp] = theta
+            theta_store_temp[k] = theta
+            lambda_current_store_temp[k] = lambda_current
             X_store_temp[k_temp] = X 
-            like_theta_store_temp[k_temp] = like_theta
+            like_theta_store_temp[k_temp] = ll_curr
             like_initial_store_temp[k_temp] = like_initial
             like_latent_store_temp[k_temp] = like
 
             # printing the current iteration number
             print("Completed iterations:", k+1, end='\r')
-        
-        # updating the covariance matrix of theta
-        beta_G_mean = np.mean(theta_store_temp[:,0])
-        beta_H_mean = np.mean(theta_store_temp[:,1])
-        delta_A_mean = np.mean(theta_store_temp[:,2])
-        delta_S_mean = np.mean(theta_store_temp[:,3])
-        K_expected = np.tile([beta_G_mean,beta_H_mean,delta_A_mean,delta_S_mean],(chunk_size,1))
-        K_tilda = theta_store_temp-K_expected
-        covariance = scaling*(1/(chunk_size-1))*np.matmul(np.transpose(K_tilda),K_tilda)
 
         # saving the covariance matrix to the zarr storage
         covariance_store[k_chunk] = covariance
 
         # saving current parameter and likelihood values to the zarr storage
-        theta_store[k_start:k_end] = theta_store_temp
         X_store[k_start:k_end] = X_store_temp
         like_theta_store[k_start:k_end] = like_theta_store_temp
         like_initial_store[k_start:k_end] = like_initial_store_temp
         like_latent_store[k_start:k_end] = like_latent_store_temp
 
     # saving the acceptance rates to the zarr storage
+    theta_store[:] = theta_store_temp
+    lambda_current_store[:] = lambda_current_store_temp
     acc_store[0] = acc_theta/K
     acc_store[1] = acc_initial/K
     acc_store[2] = acc_latent/(K*K_latent)
     
     # returning outputs
     #output = {'acc_theta': acc_theta/K, 'acc_initial': acc_initial/K, 'acc_latent': acc_latent/(K*K_latent), 'acc_latent_times':acc_latent_times/acc_latent_times_total}
-    #return output
+    #return outputs
 
     # list of outputs:
     # acc_theta - acceptance rate of the theta update (RWM)
