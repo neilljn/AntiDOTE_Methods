@@ -135,4 +135,4 @@ def f(n):
 K = 100000
 K_chunk = int(K/1000)
 K_latent = 400
-MCMC_noncentred_real = inference_rippler(test_results_real,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/MCMC_noncentred_real_2',1)
+MCMC_real_data_rippler = inference_rippler(test_results_real,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../experiments/real_data_rippler/MCMC_output_test',1)

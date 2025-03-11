@@ -153,4 +153,4 @@ m = 4
 K = 100000
 K_chunk = int(K/1000)
 K_latent = 400
-MCMC_noncentred_c29_v2 = inference_block(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/MCMC_noncentred_c29_v2',1)
+MCMC_sim_study_block = inference_block(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../experiments/sim_study_block/MCMC_output_test',1)
