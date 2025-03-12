@@ -125,7 +125,7 @@ test_results = test_outcome * test_occurance
 ### inference
 
 # importing function for inference
-import function_scripts.rippler.UC_inference_rippler_alt_prop_v5 as inference_file
+import function_scripts.rippler.UC_inference_rippler_varying_U_changes as inference_file
 
 # naming the function
 inference_rippler = inference_file.inference_rippler
