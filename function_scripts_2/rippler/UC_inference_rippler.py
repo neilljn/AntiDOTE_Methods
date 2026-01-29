@@ -14,12 +14,12 @@ import zarr
 import time
 
 # importing other functions
-from function_scripts.rippler.X_from_U import X_from_U_jit
-from function_scripts.rippler.U_bounds_from_X import U_bounds_from_X_jit
-from function_scripts.rippler.log_dis_U import log_dis_U_jit
-from function_scripts.rippler.log_dis_theta import log_dis_theta_jit
-from function_scripts.rippler.log_dis_X_0 import log_dis_X_0
-from function_scripts.rippler.prop_new_U_bounds import prop_new_U_bounds_jit
+from function_scripts_2.rippler.X_from_U import X_from_U_jit
+from function_scripts_2.rippler.U_bounds_from_X import U_bounds_from_X_jit
+from function_scripts_2.rippler.log_dis_U import log_dis_U_jit
+from function_scripts_2.rippler.log_dis_theta import log_dis_theta_jit
+from function_scripts_2.rippler.log_dis_X_0 import log_dis_X_0
+from function_scripts_2.rippler.prop_new_U_bounds import prop_new_U_bounds_jit
 
 # MCMC algorithm for inference using u instead of C
 def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,seasonal_matrix_G:np.array,seasonal_matrix_H:np.array,age:np.array,sex:np.array,sens:float,spec:float,theta_start:np.array,X_start:np.array,covariance_start:np.array,nu_0:float,f,delta:float,mu:np.array,prior_X_0:float,K:int,K_latent:int,K_chunk:int,zarr_names_start:str,seed:int) :
