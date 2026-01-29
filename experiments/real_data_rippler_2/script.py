@@ -1,8 +1,8 @@
-##### sim_study_rippler_2
+##### real_data_rippler
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
-### preamble
+### preamble 
 
 # importing numpy
 import numpy as np
@@ -89,15 +89,10 @@ for i in range(N):
         if house_list[i]==house_list[j]:
             h[i,j] = 1
 
-# true values of the paramters
-theta = np.array([0.1,750,0,0])
-
-# true values of other inputs
-prop_0 = 0.3
+# assumed true values
 gamma = 0.5
-test_rate = 0.3
-sens = 0.95
-spec = 0.99
+sens = 0.8
+spec = 0.95
 
 # seasonality modifiers
 seasonality_mode = 2
@@ -108,16 +103,6 @@ t_ast = 17
 seasonal_vector = np.array([1 - np.cos(2*np.pi*(t+t_ast)/seasonal_period) for t in range(T+1)])
 seasonal_matrix_G = np.tile(seasonal_vector, (N,1)).T
 seasonal_matrix_H = np.tile(1, (T+1,N))
-
-# simulating the data
-UC_results = UC_sim(N,h,age,sex,prop_0,theta,gamma,test_rate,sens,spec,T,seasonality_mode,seasonal_period,t_ast,1)
-
-# creating a test result matrix
-random.seed(256)
-test_occurance = test_results_real*0 + 1
-pos_prob = sens*UC_results['X'] + (1-spec)*(1-UC_results['X'])
-test_outcome = random.binomial(1,pos_prob)
-test_results = test_outcome * test_occurance
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
@@ -131,11 +116,11 @@ inference_rippler = inference_file.inference_rippler
 
 # hyperparameters of priors
 mu = np.array([0.001,0.001,0.001,0.001])
-prior_X_0 = 0.3
+prior_X_0 = 0.35
 
 # starting values
 theta_start = np.array([0.5,250,0,0])
-X_start = UC_sim(N,h,age,sex,prior_X_0,theta_start,gamma,test_rate,sens,spec,T,seasonality_mode,seasonal_period,t_ast,1)['X']
+X_start = UC_sim(N,h,age,sex,prior_X_0,theta_start,gamma,0.1,sens,spec,T,seasonality_mode,seasonal_period,t_ast,1)['X']
 # theta_start = theta
 # X_start = UC_results['X']
 covariance_start = 0.000001*np.identity(4)
@@ -150,4 +135,4 @@ def f(n):
 K = 25000
 K_chunk = int(K/1000)
 K_latent = 400
-MCMC_sim_study_rippler = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_rippler_2/MCMC_output',1)
+MCMC_real_data_rippler = inference_rippler(test_results_real,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/real_data_rippler_2/MCMC_output',1)
