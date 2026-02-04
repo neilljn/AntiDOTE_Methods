@@ -27,10 +27,10 @@ def U_bounds_from_X_jax (X:np.array,seasonal_matrix_G:np.array,seasonal_matrix_H
 
     # probability of infection at all points in time
     #seasonal = 1 - jnp.cos(2*jnp.pi*t/52)
-    globe = jnp.matmul(X,1-h)
+    globe = jnp.matmul(X,1-h)/N
     household = theta[1] * jnp.matmul(X,h)
     covariate = theta[2]*age + theta[3]*sex
-    transmission_matrix = jnp.array(jnp.exp(covariate)*theta[0]*(1/N)*(globe*seasonal_matrix_G+household*seasonal_matrix_H))
+    transmission_matrix = jnp.array(jnp.exp(covariate)*theta[0]*(globe*seasonal_matrix_G+household*seasonal_matrix_H))
     prob_col = 1-jnp.exp(-1*transmission_matrix[0:T])
 
     # creating a matrix comparing the value of the latent variable at time t vs time t-1

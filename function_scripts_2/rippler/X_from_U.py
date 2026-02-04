@@ -33,10 +33,10 @@ def inside_maker (N:int, T:int, theta:np.array, gamma:float, seasonal_matrix_G:n
 
         # calculating the transmission rate for each individual
         #seasonal = 1 - jnp.cos(2*jnp.pi*(t+16)/52)
-        globe = jnp.matmul(1-h,X[t-1])
+        globe = jnp.matmul(1-h,X[t-1])/N
         household = theta[1] * jnp.matmul(h,X[t-1])
         covariate = theta[2]*age + theta[3]*sex
-        transmission = jnp.array(jnp.exp(covariate)*theta[0]*(1/N)*(globe*seasonal_matrix_G[t-1]+household*seasonal_matrix_H[t-1]))
+        transmission = jnp.array(jnp.exp(covariate)*theta[0]*(globe*seasonal_matrix_G[t-1]+household*seasonal_matrix_H[t-1]))
 
         # calculating the probilitiy of colonisation for each individual
         prob_col = 1-jnp.exp(-1*transmission)

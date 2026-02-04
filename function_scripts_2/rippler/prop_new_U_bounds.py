@@ -29,10 +29,10 @@ def prop_new_U_bounds_jax (X:np.array,seasonal_matrix_G:np.array,seasonal_matrix
 
     # probability of colonisation at time t+1
     #seasonal = 1 - jnp.cos(2*jnp.pi*(t+17)/52)
-    globe = jnp.matmul(1-h,X[t])
+    globe = jnp.matmul(1-h,X[t])/N
     household = theta[1] * jnp.matmul(h,X[t])
     covariate = theta[2]*age + theta[3]*sex
-    transmission = jnp.array(jnp.exp(covariate)*theta[0]*(1/N)*(globe*seasonal_matrix_G[t]+household*seasonal_matrix_H[t]))
+    transmission = jnp.array(jnp.exp(covariate)*theta[0]*(globe*seasonal_matrix_G[t]+household*seasonal_matrix_H[t]))
     prob_col = 1-jnp.exp(-1*transmission)
 
     # when we change the state X[t+1,j], what is the difference compared to the previous state

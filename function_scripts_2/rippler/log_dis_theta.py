@@ -26,10 +26,10 @@ def log_dis_theta_jax(X:np.array,seasonal_matrix_G:np.array,seasonal_matrix_H:np
     output = jnp.nan_to_num((theta[0]<=0)*(-1)*jnp.inf,nan=0,neginf=jnp.inf*(-1)) + jnp.nan_to_num((theta[1]<=0)*(-1)*jnp.inf,nan=0,neginf=jnp.inf*(-1))
 
     # creating the transmission matrix
-    globe = jnp.matmul(X,1-h)
+    globe = jnp.matmul(X,1-h)/N
     household = theta[1] * jnp.matmul(X,h)
     covariate = theta[2]*age + theta[3]*sex
-    transmission_matrix = jnp.array(jnp.exp(covariate)*theta[0]*(1/N)*(globe*seasonal_matrix_G+household*seasonal_matrix_H))
+    transmission_matrix = jnp.array(jnp.exp(covariate)*theta[0]*(globe*seasonal_matrix_G+household*seasonal_matrix_H))
 
     # creating a matrix comparing the value of the latent variable at time t vs time t-1
     latent_diff = X[1:(T+1)] - X[0:T]

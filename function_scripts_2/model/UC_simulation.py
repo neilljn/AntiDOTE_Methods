@@ -28,7 +28,7 @@ def transmission_rate(N:int,h:np.array,seasonality_mode:int,seasonal_period:floa
 
         # calculating the global component
         #globe = beta_G * sum(C) / n
-        globe = np.matmul(1-h,C)
+        globe = np.matmul(1-h,C)/N
 
         # calculating the within-household component
         household = theta[1] * np.matmul(h,C)
@@ -38,11 +38,11 @@ def transmission_rate(N:int,h:np.array,seasonality_mode:int,seasonal_period:floa
         
         # combining the three components, returning the overall transmission rate
         if seasonality_mode==0:
-            return(np.exp(covariate)*theta[0]*(1/N)*(globe+household))
+            return(np.exp(covariate)*theta[0]*(globe+household))
         elif seasonality_mode==1:
-            return(np.exp(covariate)*theta[0]*(1/N)*seasonal*(globe+household))
+            return(np.exp(covariate)*theta[0]*seasonal*(globe+household))
         elif seasonality_mode==2:
-            return(np.exp(covariate)*theta[0]*(1/N)*(globe*seasonal+household))
+            return(np.exp(covariate)*theta[0]*(globe*seasonal+household))
 
     # returning the interior function
     return transmission_rate_interior
