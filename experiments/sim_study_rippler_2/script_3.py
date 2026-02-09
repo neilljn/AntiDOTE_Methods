@@ -151,4 +151,4 @@ K = 100000
 K_chunk = int(K/1000)
 K_initial = 10
 K_latent = 400
-MCMC_sim_study_rippler = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'experiments/sim_study_rippler_2/MCMC_output_3',3)
+MCMC_sim_study_rippler = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_rippler_2/MCMC_output_3',3)
