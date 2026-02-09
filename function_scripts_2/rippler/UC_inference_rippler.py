@@ -22,7 +22,7 @@ from function_scripts_2.rippler.log_dis_X_0 import log_dis_X_0
 from function_scripts_2.rippler.prop_new_U_bounds import prop_new_U_bounds_jit
 
 # MCMC algorithm for inference using u instead of C
-def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,seasonal_matrix_G:np.array,seasonal_matrix_H:np.array,age:np.array,sex:np.array,sens:float,spec:float,theta_start:np.array,X_start:np.array,covariance_start:np.array,nu_0:float,f,delta:float,mu:np.array,prior_X_0:float,K:int,K_latent:int,K_chunk:int,zarr_names_start:str,seed:int) :
+def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,seasonal_matrix_G:np.array,seasonal_matrix_H:np.array,age:np.array,sex:np.array,sens:float,spec:float,theta_start:np.array,X_start:np.array,covariance_start:np.array,nu_0:float,f,delta:float,mu:np.array,prior_X_0:float,K:int,K_initial:int,K_latent:int,K_chunk:int,zarr_names_start:str,seed:int) :
 
     # list of inputs:
     # test_results - matrix of all individuals colonisation status over time
@@ -45,6 +45,7 @@ def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,
     # mu - vector of hyperparameters for the priors of beta_G, beta_H, delta_A, delta_S
     # prior_X_0 - prior proportion of individuals initially colonised
     # K - number of macroreplications
+    # K_initial - number of initial condition changes within each macroreplication
     # K_latent - number of latent variable changes within each macroreplication
     # K_chunk - number of chunks
     # zarr_names_start - names of the zarr files that the results will be stored in
@@ -90,6 +91,7 @@ def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,
     times_chosen_store = zarr.open(zarr_names_start+'/times_chosen.zarr', mode='w', shape=(T, ), chunks=(1, ))
     indiv_chosen_store = zarr.open(zarr_names_start+'/indiv_chosen.zarr', mode='w', shape=(N, ), chunks=(1, ))
     lambda_current_store = zarr.open(zarr_names_start+'/lambda_current.zarr', mode='w', shape=(K, ), chunks=(chunk_size, ))
+    time_store = zarr.open(zarr_names_start+'/time.zarr', mode='w', shape=(1, ), chunks=(1, ))
 
     # creating a temporary storage array for theta (in the RAM)
     theta_store_temp = np.zeros((K,4))
@@ -154,30 +156,33 @@ def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,
             # the log likelihood for this X matrix
             like = log_dis_U_jit(X,test_results,sens,spec)
 
-            # generating a u matrix for our current X matrix 
-            U_bounds = U_bounds_from_X_jit(X,seasonal_matrix_G,seasonal_matrix_H,age,sex,theta,gamma,T,N,h)
-            U = random.uniform(U_bounds['lower'],U_bounds['upper'])
+            # update the initial conditions K_initial times
+            for k_initial in range(K_initial):
 
-            # proposing new initial conditions
-            X_0_prop = np.array(X.copy())
-            j_change = random.randint(0,N)
-            X_0_prop[0,j_change] = 1-X_0_prop[0,j_change]
+                # generating a u matrix for our current X matrix 
+                U_bounds = U_bounds_from_X_jit(X,seasonal_matrix_G,seasonal_matrix_H,age,sex,theta,gamma,T,N,h)
+                U = random.uniform(U_bounds['lower'],U_bounds['upper'])
 
-            # calculating the log likelihood based on the proposed C
-            X_prop = X_from_U_jit(U,np.array([X_0_prop[0]]),seasonal_matrix_G,seasonal_matrix_H,age,sex,theta,gamma,N,T,h)
-            #C_prop = C_create(u,C_0_prop[0],transmission_rate(394,h,52,3),beta_G,beta_HH,gamma,n,T)
-            like_prop = log_dis_U_jit(X_prop,test_results,sens,spec)
+                # proposing new initial conditions
+                X_0_prop = np.array(X.copy())
+                j_change = random.randint(0,N)
+                X_0_prop[0,j_change] = 1-X_0_prop[0,j_change]
 
-            # M-H step to potentially update the initial conditions
-            log_alpha = like_prop - like + log_dis_X_0(X_prop,prior_X_0,N) - log_dis_X_0(X,prior_X_0,N)
-            log_v = np.log(random.uniform())
-            if log_v < log_alpha :
-                X = X_prop
-                like = like_prop
-                like_initial = like_prop + log_dis_X_0(X_prop,prior_X_0,N)
-                acc_initial += 1
-            else:
-                like_initial = like + log_dis_X_0(X,prior_X_0,N)
+                # calculating the log likelihood based on the proposed C
+                X_prop = X_from_U_jit(U,np.array([X_0_prop[0]]),seasonal_matrix_G,seasonal_matrix_H,age,sex,theta,gamma,N,T,h)
+                #C_prop = C_create(u,C_0_prop[0],transmission_rate(394,h,52,3),beta_G,beta_HH,gamma,n,T)
+                like_prop = log_dis_U_jit(X_prop,test_results,sens,spec)
+
+                # M-H step to potentially update the initial conditions
+                log_alpha = like_prop - like + log_dis_X_0(X_prop,prior_X_0,N) - log_dis_X_0(X,prior_X_0,N)
+                log_v = np.log(random.uniform())
+                if log_v < log_alpha :
+                    X = X_prop
+                    like = like_prop
+                    like_initial = like_prop + log_dis_X_0(X_prop,prior_X_0,N)
+                    acc_initial += 1
+                else:
+                    like_initial = like + log_dis_X_0(X,prior_X_0,N)
 
             # generating a u matrix for our current X matrix 
             U_bounds = U_bounds_from_X_jit(X,seasonal_matrix_G,seasonal_matrix_H,age,sex,theta,gamma,T,N,h)
@@ -252,11 +257,12 @@ def inference_rippler (test_results:np.array,N:int,h:np.array,gamma:float,T:int,
     theta_store[:] = theta_store_temp
     lambda_current_store[:] = lambda_current_store_temp
     acc_store[0] = acc_theta/K
-    acc_store[1] = acc_initial/K
+    acc_store[1] = acc_initial/(K*K_initial)
     acc_store[2] = acc_latent/(K*K_latent)
     acc_latent_times_store[:] = acc_latent_times/acc_latent_times_total
     times_chosen_store[:] = acc_latent_times_total
     indiv_chosen_store[:] = acc_latent_indiv_total
+    time_store[0] = time.time()-start_time
     
     # returning outputs
     #output = {'acc_theta': acc_theta/K, 'acc_initial': acc_initial/K, 'acc_latent': acc_latent/(K*K_latent), 'acc_latent_times':acc_latent_times/acc_latent_times_total}
