@@ -22,7 +22,7 @@ import pandas as pd
 sys.path.append('./.')
 
 # importing functions for model simulation
-import function_scripts.model.UC_simulation as UC_simulation_file
+import function_scripts_2.model.UC_simulation as UC_simulation_file
 
 # naming the functions
 UC_sim = UC_simulation_file.UC_sim
@@ -125,7 +125,7 @@ test_results = test_outcome * test_occurance
 ### inference
 
 # importing function for inference
-import function_scripts.rippler.UC_inference_rippler_varying_U_changes as inference_file
+import function_scripts_2.rippler.UC_inference_rippler_varying_U_changes as inference_file
 
 # naming the function
 inference_rippler = inference_file.inference_rippler
@@ -152,14 +152,15 @@ K = 10000
 K_chunk = int(K/1000)
 # K = 4000
 # K_chunk = 10
+K_initial = 10
 K_latent = 100
-MCMC_rippler_varying_U_01 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,1,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_01',1)
-MCMC_rippler_varying_U_02 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,2,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_02',1)
-MCMC_rippler_varying_U_03 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,3,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_03',1)
-MCMC_rippler_varying_U_04 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,4,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_04',1)
-MCMC_rippler_varying_U_05 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,5,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_05',1)
-MCMC_rippler_varying_U_06 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,6,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_06',1)
-MCMC_rippler_varying_U_07 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,7,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_07',1)
-MCMC_rippler_varying_U_08 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,8,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_08',1)
-MCMC_rippler_varying_U_09 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,9,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_09',1)
-MCMC_rippler_varying_U_10 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,10,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_10',1)
+MCMC_rippler_varying_U_01 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,1,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_01',1)
+MCMC_rippler_varying_U_02 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,2,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_02',1)
+MCMC_rippler_varying_U_03 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,3,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_03',1)
+MCMC_rippler_varying_U_04 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,4,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_04',1)
+MCMC_rippler_varying_U_05 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,5,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_05',1)
+MCMC_rippler_varying_U_06 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,6,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_06',1)
+MCMC_rippler_varying_U_07 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,7,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_07',1)
+MCMC_rippler_varying_U_08 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,8,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_08',1)
+MCMC_rippler_varying_U_09 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,9,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_09',1)
+MCMC_rippler_varying_U_10 = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,10,'experiments/sim_study_rippler_varying_U_changes/MCMC_output_U_10',1)
