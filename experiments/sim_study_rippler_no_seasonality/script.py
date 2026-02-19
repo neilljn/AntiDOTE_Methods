@@ -22,7 +22,7 @@ import pandas as pd
 sys.path.append('./.')
 
 # importing functions for model simulation
-import function_scripts.model.UC_simulation as UC_simulation_file
+import function_scripts_2.model.UC_simulation as UC_simulation_file
 
 # naming the functions
 UC_sim = UC_simulation_file.UC_sim
@@ -124,7 +124,7 @@ test_results = test_outcome * test_occurance
 ### inference
 
 # importing function for inference
-import function_scripts.rippler.UC_inference_rippler as inference_file
+import function_scripts_2.rippler.UC_inference_rippler as inference_file
 
 # naming the function
 inference_rippler = inference_file.inference_rippler
@@ -149,5 +149,6 @@ def f(n):
 # running the MCMC
 K = 10000
 K_chunk = int(K/1000)
+K_initial = 10
 K_latent = 100
-MCMC_sim_study_rippler_no_seasonality = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_rippler_no_seasonality/MCMC_output',1)
+MCMC_sim_study_rippler_no_seasonality = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'experiments/sim_study_rippler_no_seasonality/MCMC_output',1)
