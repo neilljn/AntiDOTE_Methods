@@ -22,7 +22,7 @@ import pandas as pd
 sys.path.append('./.')
 
 # importing functions for model simulation
-import function_scripts.model.UC_simulation as UC_simulation_file
+import function_scripts_2.model.UC_simulation as UC_simulation_file
 
 # naming the functions
 UC_sim = UC_simulation_file.UC_sim
@@ -124,7 +124,7 @@ test_results = test_outcome * test_occurance
 ### inference
 
 # importing function for inference
-import function_scripts.block.UC_inference_block as inference_file
+import function_scripts_2.block.UC_inference_block as inference_file
 
 # naming the function
 inference_block = inference_file.inference_block
