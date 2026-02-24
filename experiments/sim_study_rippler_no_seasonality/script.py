@@ -93,7 +93,7 @@ for i in range(N):
 theta = np.array([0.1,1.5,0,0])
 
 # true values of other inputs
-prop_0 = 0.3
+prop_0 = 0.25
 gamma = 0.5
 test_rate = 0.3
 sens = 0.95
@@ -110,7 +110,7 @@ seasonal_matrix_G = np.tile(1, (T+1,N))
 seasonal_matrix_H = np.tile(1, (T+1,N))
 
 # simulating the data
-UC_results = UC_sim(N,h,age,sex,prop_0,theta,gamma,test_rate,sens,spec,T,seasonality_mode,seasonal_period,t_ast,1)
+UC_results = UC_sim(N,h,age,sex,prop_0,theta,gamma,test_rate,sens,spec,T,seasonality_mode,seasonal_period,t_ast,3)
 
 # creating a test result matrix
 random.seed(256)
@@ -131,7 +131,7 @@ inference_rippler = inference_file.inference_rippler
 
 # hyperparameters of priors
 mu = np.array([0.001,0.001,0.001,0.001])
-prior_X_0 = 0.3
+prior_X_0 = 0.25
 
 # starting values
 # theta_start = np.array([0.5,0.5,0,0])
@@ -151,4 +151,4 @@ K = 10000
 K_chunk = int(K/1000)
 K_initial = 10
 K_latent = 100
-MCMC_sim_study_rippler_no_seasonality = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'experiments/sim_study_rippler_no_seasonality/MCMC_output',1)
+MCMC_sim_study_rippler_no_seasonality = inference_rippler(test_results,N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_rippler_no_seasonality/MCMC_output',1)

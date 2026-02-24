@@ -22,7 +22,7 @@ import pandas as pd
 sys.path.append('./.')
 
 # importing functions for model simulation
-import function_scripts.model.UC_simulation as UC_simulation_file
+import function_scripts_2.model.UC_simulation as UC_simulation_file
 
 # naming the functions
 UC_sim = UC_simulation_file.UC_sim
@@ -126,7 +126,7 @@ UC_results_10 = UC_sim(N,h,age,sex,prop_0,theta,gamma,0.50,sens,spec,T,seasonali
 ### inference: rippler
 
 # importing function for inference
-import function_scripts.rippler.UC_inference_rippler as inference_file
+import function_scripts_2.rippler.UC_inference_rippler as inference_file
 
 # naming the function
 inference_rippler = inference_file.inference_rippler
@@ -151,26 +151,27 @@ def f(n):
 # MCMC settings
 K = 1000
 K_chunk = int(K/1000)
+K_initial = 3
 K_latent = 100
 
 # running the MCMC
-MCMC_rippler_varying_tests_01 = inference_rippler(UC_results_01['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_01',1)
-MCMC_rippler_varying_tests_02 = inference_rippler(UC_results_02['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_02',1)
-MCMC_rippler_varying_tests_03 = inference_rippler(UC_results_03['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_03',1)
-MCMC_rippler_varying_tests_04 = inference_rippler(UC_results_04['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_04',1)
-MCMC_rippler_varying_tests_05 = inference_rippler(UC_results_05['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_05',1)
-MCMC_rippler_varying_tests_06 = inference_rippler(UC_results_06['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_06',1)
-MCMC_rippler_varying_tests_07 = inference_rippler(UC_results_07['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_07',1)
-MCMC_rippler_varying_tests_08 = inference_rippler(UC_results_08['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_08',1)
-MCMC_rippler_varying_tests_09 = inference_rippler(UC_results_09['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_09',1)
-MCMC_rippler_varying_tests_10 = inference_rippler(UC_results_10['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/rippler_10',1)
+MCMC_rippler_varying_tests_01 = inference_rippler(UC_results_01['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_01',1)
+MCMC_rippler_varying_tests_02 = inference_rippler(UC_results_02['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_02',1)
+MCMC_rippler_varying_tests_03 = inference_rippler(UC_results_03['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_03',1)
+MCMC_rippler_varying_tests_04 = inference_rippler(UC_results_04['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_04',1)
+MCMC_rippler_varying_tests_05 = inference_rippler(UC_results_05['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_05',1)
+MCMC_rippler_varying_tests_06 = inference_rippler(UC_results_06['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_06',1)
+MCMC_rippler_varying_tests_07 = inference_rippler(UC_results_07['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_07',1)
+MCMC_rippler_varying_tests_08 = inference_rippler(UC_results_08['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_08',1)
+MCMC_rippler_varying_tests_09 = inference_rippler(UC_results_09['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_09',1)
+MCMC_rippler_varying_tests_10 = inference_rippler(UC_results_10['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_initial,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_rippler_10',1)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### inference: move/add/delete
 
 # importing function for inference
-import function_scripts.block.UC_inference_block as inference_file
+import function_scripts_2.block.UC_inference_block as inference_file
 
 # naming the function
 inference_block = inference_file.inference_block
@@ -201,23 +202,23 @@ K_chunk = int(K/1000)
 K_latent = 100
 
 # running the MCMC
-MCMC_block_varying_tests_01 = inference_block(UC_results_01['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_01',1)
-MCMC_block_varying_tests_02 = inference_block(UC_results_02['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_02',1)
-MCMC_block_varying_tests_03 = inference_block(UC_results_03['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_03',1)
-MCMC_block_varying_tests_04 = inference_block(UC_results_04['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_04',1)
-MCMC_block_varying_tests_05 = inference_block(UC_results_05['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_05',1)
-MCMC_block_varying_tests_06 = inference_block(UC_results_06['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_06',1)
-MCMC_block_varying_tests_07 = inference_block(UC_results_07['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_07',1)
-MCMC_block_varying_tests_08 = inference_block(UC_results_08['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_08',1)
-MCMC_block_varying_tests_09 = inference_block(UC_results_09['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_09',1)
-MCMC_block_varying_tests_10 = inference_block(UC_results_10['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'experiments/sim_study_comparison_varying_data/MCMC_output/block_10',1)
+MCMC_block_varying_tests_01 = inference_block(UC_results_01['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_01',1)
+MCMC_block_varying_tests_02 = inference_block(UC_results_02['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_02',1)
+MCMC_block_varying_tests_03 = inference_block(UC_results_03['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_03',1)
+MCMC_block_varying_tests_04 = inference_block(UC_results_04['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_04',1)
+MCMC_block_varying_tests_05 = inference_block(UC_results_05['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_05',1)
+MCMC_block_varying_tests_06 = inference_block(UC_results_06['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_06',1)
+MCMC_block_varying_tests_07 = inference_block(UC_results_07['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_07',1)
+MCMC_block_varying_tests_08 = inference_block(UC_results_08['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_08',1)
+MCMC_block_varying_tests_09 = inference_block(UC_results_09['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_09',1)
+MCMC_block_varying_tests_10 = inference_block(UC_results_10['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,m,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_block_10',1)
 
 # ---------------------------------------------------------------------------------------------------------------------------------------------------
 
 ### inference
 
 # importing function for inference
-import function_scripts.iFFBS.UC_inference_iFFBS as inference_file
+import function_scripts_2.iFFBS.UC_inference_iFFBS as inference_file
 
 # naming the function
 inference_iFFBS = inference_file.inference_iFFBS
@@ -245,13 +246,13 @@ K_chunk = int(K/1000)
 K_latent = 100
 
 # running the MCMC
-MCMC_iFFBS_varying_tests_01 = inference_iFFBS(UC_results_01['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_01',1)
-MCMC_iFFBS_varying_tests_02 = inference_iFFBS(UC_results_02['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_02',1)
-MCMC_iFFBS_varying_tests_03 = inference_iFFBS(UC_results_03['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_03',1)
-MCMC_iFFBS_varying_tests_04 = inference_iFFBS(UC_results_04['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_04',1)
-MCMC_iFFBS_varying_tests_05 = inference_iFFBS(UC_results_05['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_05',1)
-MCMC_iFFBS_varying_tests_06 = inference_iFFBS(UC_results_06['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_06',1)
-MCMC_iFFBS_varying_tests_07 = inference_iFFBS(UC_results_07['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_07',1)
-MCMC_iFFBS_varying_tests_08 = inference_iFFBS(UC_results_08['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_08',1)
-MCMC_iFFBS_varying_tests_09 = inference_iFFBS(UC_results_09['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_09',1)
-MCMC_iFFBS_varying_tests_10 = inference_iFFBS(UC_results_10['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'experiments/sim_study_comparison_varying_data/MCMC_output/iFFBS_10',1)
+MCMC_iFFBS_varying_tests_01 = inference_iFFBS(UC_results_01['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_01',1)
+MCMC_iFFBS_varying_tests_02 = inference_iFFBS(UC_results_02['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_02',1)
+MCMC_iFFBS_varying_tests_03 = inference_iFFBS(UC_results_03['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_03',1)
+MCMC_iFFBS_varying_tests_04 = inference_iFFBS(UC_results_04['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_04',1)
+MCMC_iFFBS_varying_tests_05 = inference_iFFBS(UC_results_05['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_05',1)
+MCMC_iFFBS_varying_tests_06 = inference_iFFBS(UC_results_06['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_06',1)
+MCMC_iFFBS_varying_tests_07 = inference_iFFBS(UC_results_07['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_07',1)
+MCMC_iFFBS_varying_tests_08 = inference_iFFBS(UC_results_08['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_08',1)
+MCMC_iFFBS_varying_tests_09 = inference_iFFBS(UC_results_09['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_09',1)
+MCMC_iFFBS_varying_tests_10 = inference_iFFBS(UC_results_10['test_results'],N,h,gamma,T,seasonal_matrix_G,seasonal_matrix_H,age,sex,sens,spec,theta_start,X_start,covariance_start,nu_0,f,delta,mu,prior_X_0,K,K_latent,K_chunk,'../luna/AntiDOTE_Methods/experiments/sim_study_comparison_varying_data/MCMC_output_iFFBS_10',1)
