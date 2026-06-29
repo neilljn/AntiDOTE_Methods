@@ -120,8 +120,8 @@ import function_scripts_2.rippler.UC_inference_rippler as inference_file
 inference_rippler = inference_file.inference_rippler
 
 # repeating the process
-num_repeats_low = 0
-num_repeats_upp = 20
+num_repeats_low = 40
+num_repeats_upp = 60
 for i in range(num_repeats_low,num_repeats_upp):
 
     # simulating the data
